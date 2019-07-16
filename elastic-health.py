@@ -14,6 +14,7 @@ import urllib.error
 # Set Global Variables
 debug = False
 url_prefix = None
+verbose = False
 
 
 # Define Common Functions
@@ -108,7 +109,11 @@ def print_dict(data):
     if data.__len__() != 0:
         sort = unique_dict_keys(data)[1]
         data_frame = pd.DataFrame.from_dict(data, orient='index', columns=unique_dict_keys(data))
-        print(data_frame.sort_values(sort).to_string(index=False))
+        if verbose:
+            print(data_frame.sort_values(sort).to_string(index=False))
+        else:
+            print(data_frame[['Name', 'Address', 'Version', 'Roles', 'CPUs', 'MemLocked', 'JVM Version', 'Heap Min',
+                              'Heap Max']].sort_values(sort).to_string(index=False))
     else:
         print("No Data")
 
@@ -134,7 +139,7 @@ def debug_err(err):
 
 
 def usage(args, exit_code):
-    print("Usage: " + args + "[options...] <server>")
+    print("Usage: " + args + " [options...] <server>")
     print("Options:")
     # Fmt:          1         2         3         4         5         6         7         8
     # Fmt: 12345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -144,6 +149,7 @@ def usage(args, exit_code):
     print(" -n, --node          Specify node search pattern")
     print(" -p, --port          Set port for server")
     print(" -s, --server        Specify the server name or ip address")
+    print(" -v, --verbose       Show additional columns")
     sys.exit(exit_code)
 
 
@@ -151,6 +157,7 @@ def usage(args, exit_code):
 def main(argv):
     global debug
     global url_prefix
+    global verbose
     elastic_port = None
     elastic_server = None
     node = None
@@ -158,7 +165,8 @@ def main(argv):
     args = None
 
     try:
-        opts, args = getopt.getopt(argv, "dhkn:p:s:", ["debug", "help", "insecure", "node=", "port=", "server="])
+        opts, args = getopt.getopt(argv, "dhkn:p:s:v", ["debug", "help", "insecure", "node=", "port=", "server=",
+                                                        "verbose"])
     except getopt.GetoptError:
         usage(sys.argv[0], 2)
 
@@ -175,6 +183,8 @@ def main(argv):
             elastic_port = arg
         elif opt in ("-s", "--server"):
             elastic_server = arg
+        elif opt in ("-v", "--verbose"):
+            verbose = True
 
     if len(args) > 0:
         if elastic_server is None:
