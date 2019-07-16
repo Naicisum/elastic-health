@@ -202,9 +202,9 @@ def main(argv):
 
     # results = fetch_nodes_list(elastic_server, elastic_port)
     if node is None:
-        results = fetch_nodes(node, elastic_server, elastic_port)
-    else:
         results = fetch_nodes(None, elastic_server, elastic_port)
+    else:
+        results = fetch_nodes(node, elastic_server, elastic_port)
 
     print_dict(results)
 
