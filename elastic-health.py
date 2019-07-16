@@ -69,6 +69,7 @@ def fetch_nodes(node, server, port):
                                   'Host': server[1]['attributes']['host'].replace(domain_name, ''),
                                   'CPUs': server[1]['os']['allocated_processors'],
                                   'MemLocked': server[1]['process']['mlockall'],
+                                  'Comp. OOPs': server[1]['jvm']['using_compressed_ordinary_object_pointers'],
                                   'JVM Name': server[1]['jvm']['vm_name'],
                                   'JVM Version': server[1]['jvm']['vm_version'],
                                   'Heap Min': server[1]['jvm']['mem']['heap_init'],
@@ -87,6 +88,7 @@ def fetch_nodes(node, server, port):
                                       'Host': server[1]['attributes']['host'].replace(domain_name, ''),
                                       'CPUs': server[1]['os']['allocated_processors'],
                                       'MemLocked': server[1]['process']['mlockall'],
+                                      'Comp. OOPs': server[1]['jvm']['using_compressed_ordinary_object_pointers'],
                                       'JVM Name': server[1]['jvm']['vm_name'],
                                       'JVM Version': server[1]['jvm']['vm_version'],
                                       'Heap Min': server[1]['jvm']['mem']['heap_init'],
@@ -112,8 +114,8 @@ def print_dict(data):
         if verbose:
             print(data_frame.sort_values(sort).to_string(index=False))
         else:
-            print(data_frame[['Name', 'Address', 'Version', 'Roles', 'CPUs', 'MemLocked', 'JVM Version', 'Heap Min',
-                              'Heap Max']].sort_values(sort).to_string(index=False))
+            print(data_frame[['Name', 'Address', 'Version', 'Roles', 'CPUs', 'MemLocked', 'Comp. OOPs', 'JVM Version',
+                              'Heap Min', 'Heap Max']].sort_values(sort).to_string(index=False))
     else:
         print("No Data")
 
